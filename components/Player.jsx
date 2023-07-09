@@ -123,13 +123,13 @@ return (
         {songInfo && (
             <div className="flex items-center space-x-4">
                 <img
-                    src={songInfo.album.images[0].url}
-                    alt={songInfo.name}
+                    src={songInfo?.album?.images[0].url}
+                    alt={songInfo?.name}
                     className="w-16 h-16"
                 />
                 <div>
-                    <p>{songInfo.name}</p>
-                    <p>{songInfo.artists.map((artist) => artist.name).join(', ')}</p>
+                    <p>{songInfo?.name}</p>
+                    <p>{songInfo?.artists?.map((artist) => artist.name).join(', ')}</p>
                 </div>
             </div>
         )}

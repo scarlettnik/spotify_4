@@ -68,10 +68,10 @@ const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId
                                 <img className='h-10 w-10' src={song?.album?.images[0]?.url} />
                                 <div>
                                     <p>{song.name}</p>
-                                    <p className='text-sm text-neutral-400'>{song.artists[0].name}</p>
+                                    <p className='text-sm text-neutral-400'>{song?.artists[0]?.name}</p>
                                 </div>
                                 <div className='flex-grow flex items-center justify-end'>
-                                    <p className='text-sm text-neutral-400'>{millisToMinutesAndSeconds(song.duration_ms)}</p>
+                                    <p className='text-sm text-neutral-400'>{millisToMinutesAndSeconds(song?.duration_ms)}</p>
                                 </div>
 
                             </div>

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
     const { data: session } = useSession()
     const [playlists, setPlaylists] = useState([])
-    // console.log(session.user.accessToken)
     useEffect(() => {
         async function f() {
             if (session && session.accessToken) {

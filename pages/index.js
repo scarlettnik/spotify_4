@@ -4,7 +4,6 @@ import Player from "@/components/Player"
 import LocalPlaylist from "@/components/LocalPlaylist"
 import Search from "@/components/Search"
 import Sidebar from "@/components/Sidebar"
-import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 
 export default function Home() {

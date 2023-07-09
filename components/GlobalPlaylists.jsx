@@ -37,9 +37,9 @@ const LocalPlaylists = ({ setView, setGlobalPlaylistId }) => {
                         <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 top-[156px] group-hover:top-[148px] right-6'>
                             <PlayIcon className='h-6 w-6 text-black' />
                         </div>
-                        <img className='w-48 h-48 mb-4' src={playlist.images[0].url} />
-                        <p className='text-base text-white mb-1 w-48 truncate'>{playlist.name}</p>
-                        <p className='text-sm text-neutral-400 mb-8 w-48 truncate'>By {playlist.owner.display_name}</p>
+                        <img className='w-48 h-48 mb-4' src={playlist?.images[0]?.url} />
+                        <p className='text-base text-white mb-1 w-48 truncate'>{playlist?.name}</p>
+                        <p className='text-sm text-neutral-400 mb-8 w-48 truncate'>By {playlist?.owner?.display_name}</p>
                     </div>
                 })}
             </div>

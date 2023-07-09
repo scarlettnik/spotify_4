@@ -100,7 +100,6 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
                     </div>
                 </div>
                 <div className='space-y-4'>
-                    <h2 className='text-xl font-bold px-8'>Related artists</h2>
                     <div className='flex flex-wrap gap-4 px-8 pb-28'>
                         {relatedArtists.slice(0, 4).map((artist) => {
                             return <div onClick={() => setGlobalArtistId(artist.id)} key={artist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>

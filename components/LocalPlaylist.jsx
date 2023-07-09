@@ -55,7 +55,7 @@ const PlaylistView = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTra
                     </div>
                 </section>
                 <div className='text-white px-8 flex flex-col space-y-1 pb-28'>
-                    {playlistData?.tracks.items.map((track, i) => {
+                    {playlistData?.tracks?.items?.map((track, i) => {
                         return <Song
                             setView={setView}
                             setGlobalArtistId={setGlobalArtistId}
