@@ -1,4 +1,4 @@
-import { BuildingLibraryIcon, HeartIcon, HomeIcon, MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import { BuildingLibraryIcon, MagnifyingGlassIcon} from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
