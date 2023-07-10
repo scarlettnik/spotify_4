@@ -1,14 +1,12 @@
 import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
-import { useGlobal } from 'reactn';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Slider } from 'antd';
 
 const Player = ({ globalCurrentSongId, setGlobalCurrentSongId, globalIsTrackPlaying, setGlobalIsTrackPlaying} ) => {
 const { data: session } = useSession();
 const [songInfo, setSongInfo] = useState(null);
-const [volume, setVolume] = useState(50);
-const audioRef = useRef(null);
+const [volume, setVolume] = useState(50)
 
 
 async function fetchSongInfo(trackId) {

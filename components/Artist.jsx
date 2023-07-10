@@ -4,6 +4,7 @@ import Song from './Song';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { shuffle } from 'lodash';
 import { PlayIcon } from '@heroicons/react/24/solid';
+import styled, { css } from 'styled-components';
 
 const colors = [
     'from-indigo-500',
@@ -14,6 +15,153 @@ const colors = [
     'from-pink-500',
     'from-purple-500'
 ]
+
+const GradientBackground = styled.section`
+    ${({ color }) => css`
+        background-image: linear-gradient(to bottom, transparent, ${color}, var(--color-neutral-900));
+    `}
+`;
+
+const ArtistContainer = styled.div`
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    width:100%;
+    flex-direction: column;
+`;
+
+const LogoutButton = styled.div`
+    position: absolute;
+    top: 2.5rem;
+    right: 2rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    background-color: var(--color-neutral-900);
+    opacity: 0.9;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0.25rem 0.5rem;
+    transition: opacity 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 0.8;
+    }
+`;
+
+const LogoutButtonText = styled.p`
+    font-size: 1rem;
+    color: var(--color-white);
+`;
+
+const LogoutButtonIcon = styled(ChevronDownIcon)`
+    height: 1.25rem;
+    width: 1.25rem;
+    color: var(--color-white);
+    margin-left: 0.25rem;
+`;
+
+const ArtistHeader = styled.header`
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--color-neutral-900);
+    height: 20rem;
+    padding: 2rem;
+`;
+
+const ArtistImage = styled.img`
+    height: 11rem;
+    width: 11rem;
+    border-radius: 50%;
+`;
+
+const ArtistInfo = styled.div`
+    margin-left: 2rem;
+`;
+
+const ArtistName = styled.h1`
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-white);
+    margin-bottom: 0.5rem;
+`;
+
+const TopTracksContainer = styled.div`
+    padding: 2rem;
+`;
+
+const TopTracksHeader = styled.h2`
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 1rem;
+`;
+
+const TopTracksList = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    color: var(--color-white);
+`;
+
+const RelatedArtistsContainer = styled.div`
+    padding: 2rem;
+`;
+
+const RelatedArtistsHeader = styled.h2`
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 1rem;
+`;
+
+const RelatedArtistsList = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0 2rem;
+`;
+
+const RelatedArtistCard = styled.div`
+    cursor: pointer;
+    position: relative;
+    width: 14rem;
+    margin-bottom: 1rem;
+    background-color: var(--color-neutral-800);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+        background-color: var(--color-neutral-600);
+    }
+`;
+
+const RelatedArtistImage = styled.img`
+    width: 100%;
+    height: 10rem;
+    border-radius: 50%;
+`;
+
+const RelatedArtistName = styled.p`
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 0.5rem;
+    width: 11rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const RelatedArtistType = styled.p`
+    font-size: 0.875rem;
+    color: var(--color-neutral-400);
+    margin-bottom: 0;
+    width: 11rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
 
 const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying }) => {
     const { data: session } = useSession()
@@ -67,25 +215,26 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
         setColor(shuffle(colors).pop())
     }, [globalArtistId])
 
-
     return (
-        <div className='flex-grow h-screen'>
-            <div onClick={() => signOut()} className='absolute z-20 top-5 right-8 flex items-center bg-black bg-opacity-70 text-white space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2'>
+        <ArtistContainer>
+            <LogoutButton onClick={() => signOut()}>
                 <img className='rounded-full w-7 h-7' src={session?.user.image} alt="profile pic" />
-                <p className='text-sm'>Logout</p>
-                <ChevronDownIcon className='h-5 w-5' />
-            </div>
+                <LogoutButtonText>Logout</LogoutButtonText>
+                <LogoutButtonIcon />
+            </LogoutButton>
             <div className='relative -top-20 h-screen overflow-y-scroll bg-neutral-900'>
-                <section className={`flex items-end space-x-7 bg-gradient-to-b to-neutral-900 ${color} h-80 text-white p-8`}>
-                    {artistData && <img className='h-44 w-44 rounded-full' src={artistData.images[0].url} />}
-                    <div>
-                        <p className='text-sm font-bold'>Artist</p>
-                        <h1 className='text-2xl md:text-3xl lg:text-5xl font-extrabold'>{artistData?.name}</h1>
-                    </div>
-                </section>
-                <div className='space-y-4'>
-                    <h2 className='text-xl font-bold px-8'>Top tracks</h2>
-                    <div className='text-white px-8 flex flex-col space-y-1 pb-6'>
+                <GradientBackground color={color}>
+                    <ArtistHeader>
+                        {artistData && <ArtistImage src={artistData.images[0].url} />}
+                        <ArtistInfo>
+                            <p className='text-sm font-bold'>Artist</p>
+                            <ArtistName>{artistData?.name}</ArtistName>
+                        </ArtistInfo>
+                    </ArtistHeader>
+                </GradientBackground>
+                <TopTracksContainer>
+                    <TopTracksHeader>Top tracks</TopTracksHeader>
+                    <TopTracksList>
                         {topTracks.slice(0, 5).map((track, i) => {
                             return <Song
                                 setView={setView}
@@ -97,24 +246,25 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
                                 track={track}
                             />
                         })}
-                    </div>
-                </div>
-                <div className='space-y-4'>
-                    <div className='flex flex-wrap gap-4 px-8 pb-28'>
+                    </TopTracksList>
+                </TopTracksContainer>
+                <RelatedArtistsContainer>
+                    <RelatedArtistsHeader>Related artists</RelatedArtistsHeader>
+                    <RelatedArtistsList>
                         {relatedArtists.slice(0, 4).map((artist) => {
-                            return <div onClick={() => setGlobalArtistId(artist.id)} key={artist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>
-                                <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 top-[156px] group-hover:top-[148px] right-6'>
+                            return <RelatedArtistCard onClick={() => setGlobalArtistId(artist.id)} key={artist.id}>
+                                <RelatedArtistImage src={artist.images[0].url} />
+                                <RelatedArtistName>{artist.name}</RelatedArtistName>
+                                <RelatedArtistType>Artist</RelatedArtistType>
+                                <div className='opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 absolute top-[156px] group-hover:top-[148px] right-6'>
                                     <PlayIcon className='h-6 w-6 text-black' />
                                 </div>
-                                <img className='w-48 h-48 mb-4 rounded-full' src={artist.images[0].url} />
-                                <p className='text-base text-white mb-1 w-48 truncate'>{artist.name}</p>
-                                <p className='text-sm text-neutral-400 mb-8 w-48 truncate'>Artist</p>
-                            </div>
+                            </RelatedArtistCard>
                         })}
-                    </div>
-                </div>
+                    </RelatedArtistsList>
+                </RelatedArtistsContainer>
             </div>
-        </div>
+        </ArtistContainer>
     );
 }
 

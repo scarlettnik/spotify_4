@@ -1,26 +1,7 @@
 import { PlayIcon } from '@heroicons/react/24/solid';
-import { useSession } from 'next-auth/react';
 import React from 'react';
 
-const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setGlobalArtistId }) => {
-    const { data: session } = useSession()
-
-    async function playSong(track) {
-        setGlobalCurrentSongId(track.id)
-        setGlobalIsTrackPlaying(true)
-        if (session && session.accessToken) {
-            const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`
-                },
-                body: JSON.stringify({
-                    uris: [track.uri]
-                })
-            })
-            console.log("on play", response.status)
-        }
-    }
+const SearchResults = ({ playlists, artists, setView, setGlobalPlaylistId, setGlobalArtistId }) => {
 
     function selectPlaylist(playlist) {
         setView("playlist")
@@ -30,16 +11,6 @@ const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId
     function selectArtist(artist) {
         setView("artist")
         setGlobalArtistId(artist.id)
-    }
-
-    function millisToMinutesAndSeconds(millis) {
-        var minutes = Math.floor(millis / 60000);
-        var seconds = ((millis % 60000) / 1000).toFixed(0);
-        return (
-            seconds == 60 ?
-                (minutes + 1) + ":00" :
-                minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-        );
     }
 
     return (
@@ -59,25 +30,6 @@ const SearchResults = ({ playlists, songs, artists, setView, setGlobalPlaylistId
                             </>}
                         </div>
                     </div>
-                </div>
-                <div className='space-y-4'>
-                    <h2 className='text-xl font-bold'>Top songs</h2>
-                    <div className='flex flex-col'>
-                        {songs.slice(0, 4)?.map((song) => {
-                            return <div onClick={() => playSong(song)} key={song.id} className='cursor-default w-full h-16 px-4 rounded-md flex items-center gap-4 hover:bg-neutral-700'>
-                                <img className='h-10 w-10' src={song?.album?.images[0]?.url} />
-                                <div>
-                                    <p>{song.name}</p>
-                                    <p className='text-sm text-neutral-400'>{song?.artists[0]?.name}</p>
-                                </div>
-                                <div className='flex-grow flex items-center justify-end'>
-                                    <p className='text-sm text-neutral-400'>{millisToMinutesAndSeconds(song?.duration_ms)}</p>
-                                </div>
-
-                            </div>
-                        })}
-                    </div>
-
                 </div>
             </div>
             <div className='space-y-4'>
