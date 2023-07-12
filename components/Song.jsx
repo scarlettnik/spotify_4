@@ -1,7 +1,101 @@
 import { PlayIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 
+const SongContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  overflow: hidden;
+  text-color: ${({ theme }) => theme.textPrimary};
+  font-size: 1,5vh;
+  padding: 1vh;
+  cursor: default;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bgHover};
+  }
+`;
+
+const TrackInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+`;
+
+const TrackNumber = styled.p`
+  width: 5px;
+`;
+
+const AlbumImage = styled.img`
+  height: 40px;
+  width: 40px;
+`;
+
+const TrackDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  .name {
+    width: 20vh;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .artist {
+    width: 20vh;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    span {
+      ${({ theme }) => css`
+        color: ${theme.textPrimary};
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      `}
+    }
+  }
+`;
+
+const TrackDuration = styled.p`
+  width: 50px;
+  text-align: right;
+`;
+
+const AlbumName = styled.p`
+  width: 20vh;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const PlayButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.secondary};
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.secondaryHover};
+  }
+`;
 
 const Song = ({ sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
     const { data: session } = useSession()
@@ -40,31 +134,32 @@ const Song = ({ sno, track, setGlobalCurrentSongId, setGlobalIsTrackPlaying, set
     }
 
     return (
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className='grid grid-cols-2 overflow-hidden text-neutral-400 text-sm py-4 hover:bg-white hover:bg-opacity-10 rounded-lg cursor-default'>
-            <div onClick={async () => await playSong(track)} className='flex items-center space-x-4'>
-                {hover ? <PlayIcon  className='h-5 w-5 text-white' /> : <p className='w-5'>{sno + 1}</p>}
-                {track?.album?.images[0]?.url && <img className='h-10 w-10' src={track?.album?.images[0].url} />}
-                <div>
-                    <p className='w-36 lg:w-64 truncate text-white text-base'>{track?.name}</p>
-                    <p className='w-36 truncate'>
-                        {
-                            track?.artists?.map((artist, i) => {
-                                return (
-                                    <>
-                                        <span onClick={() => selectArtist(artist)} className='hover:underline'>{artist?.name}</span>
-                                        <span>{i != track?.artists?.length - 1 ? ", " : null}</span>
-                                    </>
-                                )
-                            })
-                        }
+        <SongContainer onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <TrackInfo onClick={async () => await playSong(track)}>
+                {hover ? (
+                    <PlayButton>
+                        <PlayIcon className='h-5 w-5 text-white' />
+                    </PlayButton>
+                ) : (
+                    <TrackNumber>{sno + 1}</TrackNumber>
+                )}
+                {track?.album?.images[0]?.url && <AlbumImage src={track?.album?.images[0].url} />}
+                <TrackDetails>
+                    <p className='name'>{track?.name}</p>
+                    <p className='artist'>
+                        {track?.artists?.map((artist, i) => {
+                            return (
+                                <span key={artist.id} onClick={() => selectArtist(artist)}>{artist?.name}{i !== track?.artists?.length - 1 && `, `}</span>
+                            )
+                        })}
                     </p>
-                </div>
-            </div>
+                </TrackDetails>
+            </TrackInfo>
             <div className='flex items-center justify-between ml-auto md:ml-0'>
-                <p className='w-40 truncate hidden md:inline'>{track?.album?.name}</p>
-                <p>{millisToMinutesAndSeconds(track?.duration_ms)}</p>
+                <AlbumName>{track?.album?.name}</AlbumName>
+                <TrackDuration>{millisToMinutesAndSeconds(track?.duration_ms)}</TrackDuration>
             </div>
-        </div>
+        </SongContainer>
     )
 }
 

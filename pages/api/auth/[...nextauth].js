@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 
 const scopes = [
     "user-read-email",
+    'user-read-private',
     "playlist-read-private",
     "playlist-read-collaborative",
     "user-read-currently-playing",
