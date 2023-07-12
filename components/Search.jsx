@@ -1,8 +1,41 @@
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { signOut, useSession } from 'next-auth/react';
+import {MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import {useSession } from 'next-auth/react';
 import React, { useEffect, useRef, useState } from 'react';
 import GlobalPlaylists from './GlobalPlaylists';
 import SearchResults from './SearchResults';
+import LogOut from './LogOut';
+import styled from 'styled-components';
+
+const SearchBar = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 90%;
+  margin: 0 5%;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 3rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #4d4d4d;
+  background-color: #fff;
+  border-radius: 9999px;
+  border: 1px solid #d1d1d1;
+  outline: none;
+`;
+
+const SearchIcon = styled(MagnifyingGlassIcon)`
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #4d4d4d;
+`;
 
 const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setGlobalArtistId }) => {
     const { data: session } = useSession()
@@ -29,26 +62,23 @@ const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGloba
 
     return (
         <div className='flex-grow h-screen'>
-            <header className='text-white sticky top-0 h-20 z-10 text-4xl flex items-center px-8'>
-                <MagnifyingGlassIcon className='absolute top-7 left-10 h-6 w-6 text-neutral-800' />
-                <input value={inputValue} onChange={async (e) => {
-                    setInputValue(e.target.value)
-                    await updateSearchResults(e.target.value)
-                }} ref={inputRef} className='rounded-full bg-white w-96 pl-12 text-neutral-900 text-base py-2 font-normal outline-0' />
-            </header>
-            <div onClick={() => signOut()} className='absolute z-20 top-5 right-8 flex items-center bg-black bg-opacity-70 text-white space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2'>
-                <img className='rounded-full w-7 h-7' src={session?.user?.image} alt="profile pic" />
-                <p className='text-sm'>Logout</p>
-                <ChevronDownIcon className='h-5 w-5' />
-            </div>
+            <LogOut/>
+            <SearchBar>
+                <SearchIcon/>
+                <SearchInput value={inputValue} onChange={async (e) => {
+                        setInputValue(e.target.value)
+                        await updateSearchResults(e.target.value)
+                    }} ref={inputRef} 
+                />
+            </SearchBar>
             <div>
-                {searchData === null ? <GlobalPlaylists
+                {inputValue == '' ? <GlobalPlaylists
                     setView={setView}
                     setGlobalPlaylistId={setGlobalPlaylistId}
                 /> : <SearchResults
-                    playlists={searchData?.playlists.items}
-                    songs={searchData?.tracks.items}
-                    artists={searchData?.artists.items}
+                    playlists={searchData?.playlists?.items}
+                    songs={searchData?.tracks?.items}
+                    artists={searchData?.artists?.items}
                     setView={setView}
                     setGlobalPlaylistId={setGlobalPlaylistId}
                     setGlobalCurrentSongId={setGlobalCurrentSongId}
@@ -57,7 +87,7 @@ const Search = ({ setView, setGlobalPlaylistId, setGlobalCurrentSongId, setGloba
                 />}
             </div>
         </div>
-    );
+    )
 }
 
 export default Search;

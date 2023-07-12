@@ -1,13 +1,14 @@
+import Sidebar from "@/components/Sidebar"
 import Artist from "@/components/Artist"
 import Library from "@/components/Library"
 import Player from "@/components/Player"
 import LocalPlaylist from "@/components/LocalPlaylist"
 import Search from "@/components/Search"
-import Sidebar from "@/components/Sidebar"
-import { useEffect, useState } from "react"
+import HomePage from "@/components/HomePage"
+import { useState } from "react"
 
 export default function Home() {
-  const [view, setView] = useState("search")
+  const [view, setView] = useState("homepage")
   const [globalPlaylistId, setGlobalPlaylistId] = useState(null)
   const [globalArtistId, setGlobalArtistId] = useState(null)
   const [globalCurrentSongId, setGlobalCurrentSongId] = useState(null)
@@ -15,7 +16,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="h-screen overflow-hidden bg-black">
+      <main className=" bg-neutral-300 h-screen overflow-auto">
         <div className="flex w-full">
           <Sidebar
             view={view}
@@ -23,6 +24,7 @@ export default function Home() {
             setGlobalPlaylistId={setGlobalPlaylistId}
           />
           {view === "playlist" && <LocalPlaylist
+            className = 'ml-0'
             setView={setView}
             setGlobalArtistId={setGlobalArtistId}
             globalPlaylistId={globalPlaylistId}
@@ -40,6 +42,10 @@ export default function Home() {
             setView={setView}
             setGlobalPlaylistId={setGlobalPlaylistId}
           />}
+          {view === "homepage" && <HomePage
+            setView={setView}
+            setGlobalPlaylistId={setGlobalPlaylistId}
+          />}
           {view === "artist" && <Artist
             setView={setView}
             globalArtistId={globalArtistId}
@@ -48,7 +54,7 @@ export default function Home() {
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
           />}
         </div>
-        <div className="sticky z-20 bottom-0 w-full">
+        <div className=" absolute bottom-0 w-full bg-neutral-700">
           <Player
             globalCurrentSongId={globalCurrentSongId}
             setGlobalCurrentSongId={setGlobalCurrentSongId}

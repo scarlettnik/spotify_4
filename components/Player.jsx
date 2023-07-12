@@ -1,13 +1,14 @@
-import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/react/24/solid';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Slider } from 'antd';
+import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 
-const Player = ({ globalCurrentSongId, setGlobalCurrentSongId, globalIsTrackPlaying, setGlobalIsTrackPlaying} ) => {
+const Player = ({ globalCurrentSongId, globalIsTrackPlaying, setGlobalIsTrackPlaying} ) => {
 const { data: session } = useSession();
-const [songInfo, setSongInfo] = useState(null);
+const [songInfo, setSongInfo] = useState(null)
 const [volume, setVolume] = useState(50)
-
+const [isMobile, setIsMobile] = useState(false);
+const [windowWidth, setWindowWidth] = useState(0);
 
 async function fetchSongInfo(trackId) {
     if (trackId && session && session.accessToken) {
@@ -20,6 +21,16 @@ async function fetchSongInfo(trackId) {
         setSongInfo(data);
     }
 }
+
+useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setIsMobile(window.innerWidth <= 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
 async function handlePlayPause() {
     if (session && session.accessToken) {
@@ -74,41 +85,6 @@ async function changeVolume(newVolume) {
     }
 }
 
-async function nextTrack() {
-    if (session && session.accessToken) {
-        const response = await fetch('https://api.spotify.com/v1/me/player/next', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`
-            },
-        });
-        if (response.ok && response.status) {
-            const data = await response.json();
-            setGlobalCurrentSongId(data?.item?.id);
-            setGlobalIsTrackPlaying(true);
-        } else {
-            console.log('Error switching to next track');
-        }
-    }
-}
-
-async function previousTrack() {
-    if (session && session.accessToken) {
-        const response = await fetch('https://api.spotify.com/v1/me/player/previous', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`
-            },
-        });
-        if (response.ok && response.status) {
-            const data = await response.json();
-            setGlobalCurrentSongId(data?.item?.id);
-            setGlobalIsTrackPlaying(true);
-        } else {
-            console.log('Error switching to previous track');
-        }
-    }
-}
 
 useEffect(() => {
     if (globalCurrentSongId) {
@@ -117,69 +93,44 @@ useEffect(() => {
 }, [globalCurrentSongId]);
 
 return (
-    <div className="flex items-center space-x-4">
+    <div>
         {songInfo && (
-            <div className="flex items-center space-x-4">
-                <img
-                    src={songInfo?.album?.images[0].url}
-                    alt={songInfo?.name}
-                    className="w-16 h-16"
-                />
-                <div>
-                    <p>{songInfo?.name}</p>
-                    <p>{songInfo?.artists?.map((artist) => artist.name).join(', ')}</p>
+            <div className='bg-slate-500 flex relative'>
+                
+                <div className={`items-center flex p-2`}>
+                    <img
+                        src={songInfo?.album?.images[0].url}
+                        alt={songInfo?.name}
+                        className='w-16 h-16'
+                    />
+                    <div className={`items-center px-1 ${isMobile ? 'hidden' : 'block'}`}>
+                        <p className='text-overflow: ellipsis; truncate'> {songInfo?.name}</p>
+                        <p className='text-overflow: ellipsis; truncate'>
+                            {songInfo?.artists?.map((artist) => artist.name).join(', ')}
+                        </p>
+                    </div>
                 </div>
-            </div>
-        )}
-        <div className="flex items-center space-x-4">
-            <button onClick={previousTrack}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 19l-7-7 7-7"
+                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center space-x-4'>
+                    <button onClick={handlePlayPause}>
+                        {globalIsTrackPlaying ? (
+                            <PauseIcon className='h-10 w-10' />
+                        ) : (
+                            <PlayIcon className='h-10 w-10' />
+                        )}
+                    </button>
+                </div>
+                <div className='flex items-center space-x-4'>
+                <Slider
+                        className='w-20 absolute right-4'
+                        min={0}
+                        max={100}
+                        value={volume}
+                        onChange={changeVolume}
                     />
-                </svg>
-            </button>
-            <button onClick={handlePlayPause}>
-                {globalIsTrackPlaying ? (
-                    <PauseCircleIcon className="h-6 w-6" />
-                ) : (
-                    <PlayCircleIcon className="h-6 w-6" />
-                )}
-            </button>
-            <button onClick={nextTrack}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 5l7 7-7 7"
-                    />
-                </svg>
-            </button>
-            <Slider
-                className="w-32"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={changeVolume}
-            />
-        </div>
-    </div>
+                </div>
+      </div>
+    )}
+  </div>
 );
 };
 

@@ -163,6 +163,6 @@ function Player({ globalPlaylistId }) {
         </>
       )}
     </>
-  );
+  )
 }
 export default Player

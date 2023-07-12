@@ -1,10 +1,10 @@
-import { signOut, useSession } from 'next-auth/react';
+import {useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import Song from './Song';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { shuffle } from 'lodash';
-import { PlayIcon } from '@heroicons/react/24/solid';
 import styled, { css } from 'styled-components';
+import LogOut from './LogOut';
 
 const colors = [
     'from-indigo-500',
@@ -29,57 +29,26 @@ const ArtistContainer = styled.div`
     flex-direction: column;
 `;
 
-const LogoutButton = styled.div`
-    position: absolute;
-    top: 2.5rem;
-    right: 2rem;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    background-color: var(--color-neutral-900);
-    opacity: 0.9;
-    cursor: pointer;
-    border-radius: 50%;
-    padding: 0.25rem 0.5rem;
-    transition: opacity 0.2s ease-in-out;
-
-    &:hover {
-        opacity: 0.8;
-    }
-`;
-
-const LogoutButtonText = styled.p`
-    font-size: 1rem;
-    color: var(--color-white);
-`;
-
-const LogoutButtonIcon = styled(ChevronDownIcon)`
-    height: 1.25rem;
-    width: 1.25rem;
-    color: var(--color-white);
-    margin-left: 0.25rem;
-`;
-
 const ArtistHeader = styled.header`
     display: flex;
     align-items: flex-end;
     background-color: var(--color-neutral-900);
     height: 20rem;
-    padding: 2rem;
+    padding: 3vh;
 `;
 
 const ArtistImage = styled.img`
-    height: 11rem;
-    width: 11rem;
+    height: 25vh;
+    width: 25vh;
     border-radius: 50%;
 `;
 
 const ArtistInfo = styled.div`
-    margin-left: 2rem;
+    margin-left: 2vh;
 `;
 
 const ArtistName = styled.h1`
-    font-size: 2rem;
+    font-size: 3.5vh;
     font-weight: 800;
     color: var(--color-white);
     margin-bottom: 0.5rem;
@@ -99,7 +68,6 @@ const TopTracksHeader = styled.h2`
 const TopTracksList = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 1rem 2rem;
     color: var(--color-white);
 `;
 
@@ -124,7 +92,7 @@ const RelatedArtistsList = styled.div`
 const RelatedArtistCard = styled.div`
     cursor: pointer;
     position: relative;
-    width: 14rem;
+    width: 13vh;
     margin-bottom: 1rem;
     background-color: var(--color-neutral-800);
     border-radius: 0.5rem;
@@ -137,8 +105,6 @@ const RelatedArtistCard = styled.div`
 `;
 
 const RelatedArtistImage = styled.img`
-    width: 100%;
-    height: 10rem;
     border-radius: 50%;
 `;
 
@@ -147,7 +113,6 @@ const RelatedArtistName = styled.p`
     font-weight: 700;
     color: var(--color-white);
     margin-bottom: 0.5rem;
-    width: 11rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -157,7 +122,6 @@ const RelatedArtistType = styled.p`
     font-size: 0.875rem;
     color: var(--color-neutral-400);
     margin-bottom: 0;
-    width: 11rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -217,17 +181,13 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
 
     return (
         <ArtistContainer>
-            <LogoutButton onClick={() => signOut()}>
-                <img className='rounded-full w-7 h-7' src={session?.user.image} alt="profile pic" />
-                <LogoutButtonText>Logout</LogoutButtonText>
-                <LogoutButtonIcon />
-            </LogoutButton>
-            <div className='relative -top-20 h-screen overflow-y-scroll bg-neutral-900'>
+            <LogOut/>
+            <div className='h-screen'>
                 <GradientBackground color={color}>
                     <ArtistHeader>
                         {artistData && <ArtistImage src={artistData.images[0].url} />}
                         <ArtistInfo>
-                            <p className='text-sm font-bold'>Artist</p>
+                            <p className='text-sm font-bold m-2'>Artist</p>
                             <ArtistName>{artistData?.name}</ArtistName>
                         </ArtistInfo>
                     </ArtistHeader>
@@ -235,7 +195,7 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
                 <TopTracksContainer>
                     <TopTracksHeader>Top tracks</TopTracksHeader>
                     <TopTracksList>
-                        {topTracks.slice(0, 5).map((track, i) => {
+                        {topTracks?.slice(0, 5).map((track, i) => {
                             return <Song
                                 setView={setView}
                                 setGlobalArtistId={setGlobalArtistId}
@@ -251,14 +211,11 @@ const Artist = ({ setView, globalArtistId, setGlobalArtistId, setGlobalCurrentSo
                 <RelatedArtistsContainer>
                     <RelatedArtistsHeader>Related artists</RelatedArtistsHeader>
                     <RelatedArtistsList>
-                        {relatedArtists.slice(0, 4).map((artist) => {
+                        {relatedArtists?.slice(0, 4).map((artist) => {
                             return <RelatedArtistCard onClick={() => setGlobalArtistId(artist.id)} key={artist.id}>
-                                <RelatedArtistImage src={artist.images[0].url} />
+                                <RelatedArtistImage src={artist?.images[0]?.url} />
                                 <RelatedArtistName>{artist.name}</RelatedArtistName>
                                 <RelatedArtistType>Artist</RelatedArtistType>
-                                <div className='opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 absolute top-[156px] group-hover:top-[148px] right-6'>
-                                    <PlayIcon className='h-6 w-6 text-black' />
-                                </div>
                             </RelatedArtistCard>
                         })}
                     </RelatedArtistsList>

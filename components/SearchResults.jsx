@@ -1,5 +1,63 @@
-import { PlayIcon } from '@heroicons/react/24/solid';
 import React from 'react';
+import { styled } from 'styled-components';
+
+
+const PlaylistContainer = styled.div`
+  cursor: pointer;
+  position: relative;
+  width: 20vh;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  transition: background-color 0.2s ease-in-out;
+  bachgroud-color: pink;
+  &:hover {
+    background-color: #2d3748;
+  }
+`
+const PlaylistName = styled.h2`
+  font-size: 5vh;
+  font-weight: 700;
+  margin: 1rem;
+`
+const PlaylistImage = styled.img`
+  width: 18vh;
+  height: 18vh;
+  margin-bottom: 1rem;
+`;
+
+const PlaylistTitle = styled.p`
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const PlaylistOwner = styled.p`
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #a0aec0;
+  width: 12rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+const PlaylistList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: calc(100vh - 0rem);
+  padding: 1rem;
+`;
+
+const PlaylistWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
 
 const SearchResults = ({ playlists, artists, setView, setGlobalPlaylistId, setGlobalArtistId }) => {
 
@@ -14,56 +72,45 @@ const SearchResults = ({ playlists, artists, setView, setGlobalPlaylistId, setGl
     }
 
     return (
-        <div className='flex flex-col gap-8 px-8 h-screen overflow-y-scroll'>
-            <div className='grid grid-cols-2'>
-                <div className='space-y-4'>
-                    <h2 className='text-xl font-bold'>Top result</h2>
-                    <div className='h-64 pr-8'>
-                        <div onClick={() => selectPlaylist(playlists[0])} className='cursor-pointer relative group h-64 w-full bg-neutral-800 hover:bg-neutral-700 p-4 flex flex-col gap-6 rounded-md transition duration-500'>
-                            <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-500 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 bottom-6 group-hover:bottom-8 right-8'>
-                                <PlayIcon className='h-6 w-6 text-black' />
-                            </div>
+        <PlaylistList>
+            <div>
+                    <PlaylistName>Top result</PlaylistName>
+                    <PlaylistWrapper>
+                        <PlaylistContainer onClick={() => selectPlaylist(playlists[0])}>
                             {playlists && <>
-                                <img className='h-28 w-28 rounded' src={playlists[0]?.images[0]?.url} />
-                                <p className='text-3xl font-bold'>{playlists[0]?.name}</p>
-                                <p className='text-sm text-neutral-400'>By {playlists[0]?.owner?.display_name} <span className='rounded-full bg-neutral-900 text-white font-bold ml-4 py-1 px-4'>Playlist</span></p>
+                                <PlaylistImage src={playlists[0]?.images[0]?.url} />
+                                <PlaylistTitle>{playlists[0]?.name}</PlaylistTitle>
+                                <PlaylistOwner>By {playlists[0]?.owner?.display_name} <span >Playlist</span></PlaylistOwner>
                             </>}
-                        </div>
-                    </div>
-                </div>
+                        </PlaylistContainer>
+                    </PlaylistWrapper>
             </div>
-            <div className='space-y-4'>
-                <h2 className='text-xl font-bold'>Artists</h2>
-                <div className='flex flex-wrap gap-4'>
-                    {artists.slice(0, 4).map((artist) => {
-                        return <div onClick={() => selectArtist(artist)} key={artist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>
-                            <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 top-[156px] group-hover:top-[148px] right-6'>
-                                <PlayIcon className='h-6 w-6 text-black' />
-                            </div>
-                            <img className='w-48 h-48 mb-4 rounded-full' src={artist.images[0].url} />
-                            <p className='text-base text-white mb-1 w-48 truncate'>{artist.name}</p>
-                            <p className='text-sm text-neutral-400 mb-8 w-48 truncate'>Artist</p>
-                        </div>
+            <div>
+                <PlaylistName>Artists</PlaylistName>
+                <PlaylistWrapper>
+                    {artists?.slice(0, 5).map((artist) => {
+                        return <PlaylistContainer onClick={() => selectArtist(artist)} key={artist.id}>
+                            <PlaylistImage src={artist?.images[0]?.url} />
+                            <PlaylistTitle>{artist?.name}</PlaylistTitle>
+                            <PlaylistOwner>Artist</PlaylistOwner>
+                        </PlaylistContainer>
                     })}
-                </div>
+                </PlaylistWrapper>
             </div>
-            <div className='space-y-4 mb-48'>
-                <h2 className='text-xl font-bold'>Playlists</h2>
-                <div className='flex flex-wrap gap-4'>
-                    {playlists.slice(0, 4).map((playlist) => {
-                        return <div onClick={() => selectPlaylist(playlist)} key={playlist.id} className='cursor-pointer relative group w-56 mb-2 bg-neutral-800 hover:bg-neutral-600 rounded-md p-4'>
-                            <div className='absolute opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-200 shadow-2xl shadow-neutral-900 z-10 h-12 w-12 flex items-center justify-center rounded-full bg-green-500 top-[156px] group-hover:top-[148px] right-6'>
-                                <PlayIcon className='h-6 w-6 text-black' />
-                            </div>
-                            <img className='w-48 h-48 mb-4' src={playlist.images[0].url} />
-                            <p className='text-base text-white mb-1 w-48 truncate'>{playlist.name}</p>
-                            <p className='text-sm text-neutral-400 mb-8 w-48 truncate'>By {playlist.owner.display_name}</p>
-                        </div>
+            <div>
+                <PlaylistName>Playlists</PlaylistName>
+                <PlaylistWrapper>
+                    {playlists?.slice(0, 5)?.map((playlist) => {
+                        return <PlaylistContainer onClick={() => selectPlaylist(playlist)} key={playlist?.id}>
+                            <PlaylistImage src={playlist?.images[0]?.url} />
+                            <PlaylistTitle>{playlist?.name}</PlaylistTitle>
+                            <PlaylistOwner>By {playlist?.owner?.display_name}</PlaylistOwner>
+                        </PlaylistContainer>
                     })}
-                </div>
+                </PlaylistWrapper>
             </div>
-        </div>
-    );
+        </PlaylistList>
+    )
 }
 
 export default SearchResults;
