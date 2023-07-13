@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import LogOut from "./LogOut";
 import {
   PlaylistContainer,
   PlaylistName,
@@ -40,7 +39,6 @@ const Library = ({ setView, setGlobalPlaylistId }) => {
 
   return (
     <PlaylistList>
-      <LogOut />
       <PlaylistName>Playlists</PlaylistName>
       <PlaylistWrapper>
         {playlists?.map((playlist) => (

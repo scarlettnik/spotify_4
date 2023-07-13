@@ -1,20 +1,19 @@
 import React from 'react';
 import GlobalPlaylists from './GlobalPlaylists';
-import LogOut from './LogOut';
+import { FlexContainer } from './styles/HomePageStyle';
 
 
 const HomePage = ({ setView, setGlobalPlaylistId }) => {
 
     return (
-        <div className='flex flex-col gap-8'>
-            <LogOut/>
+        <FlexContainer>
             <div> 
                 <GlobalPlaylists
                     setView={setView}
                     setGlobalPlaylistId={setGlobalPlaylistId}
                 />
             </div>
-        </div>
+        </FlexContainer>
     )
 }
 

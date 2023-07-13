@@ -1,7 +1,18 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { Slider } from "antd";
-import { PauseIcon, PlayIcon } from "@heroicons/react/24/outline";
+import { PauseI, PlayI } from "./styles/IconStyle";
+import {
+  StyledPlayer,
+  SongInfo,
+  SongImage,
+  SongDetails,
+  SongName,
+  ArtistName,
+  ControlButton,
+  VolumeSlider,
+  ControlContainer,
+  FlexContainer
+} from "./styles/PlayerStyle";
 
 const Player = ({
   globalCurrentSongId,
@@ -112,7 +123,6 @@ const Player = ({
         }
       );
       if (response.ok) {
-        console.log("Volume set to " + newVolume);
         setVolume(newVolume);
       } else {
         console.log("Error setting volume");
@@ -146,45 +156,41 @@ const Player = ({
     const deviceId = event.target.value;
     transferPlayback(deviceId);
   };
+
   return (
     <div>
       {songInfo && (
-        <div className="bg-slate-500 flex relative">
-          <div className={`items-center flex p-2`}>
-            <img
+        <StyledPlayer>
+          <SongInfo>
+            <SongImage
               src={songInfo?.album?.images[0].url}
               alt={songInfo?.name}
-              className="w-16 h-16"
             />
-            <div className={`items-center px-1`}>
-              <p className="text-overflow: ellipsis; truncate">
-                {" "}
-                {songInfo?.name}
-              </p>
-              <p className="text-overflow: ellipsis; truncate">
+            <SongDetails>
+              <SongName>{songInfo?.name}</SongName>
+              <ArtistName>
                 {songInfo?.artists?.map((artist) => artist.name).join(", ")}
-              </p>
-            </div>
-          </div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center space-x-4">
-            <button onClick={handlePlayPause}>
+              </ArtistName>
+            </SongDetails>
+          </SongInfo>
+          <ControlContainer>
+            <ControlButton onClick={handlePlayPause}>
               {globalIsTrackPlaying ? (
-                <PauseIcon className="h-10 w-10" />
+                <PauseI/>
               ) : (
-                <PlayIcon className="h-10 w-10" />
+                <PlayI/>
               )}
-            </button>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Slider
-              className="w-20 absolute right-4"
+            </ControlButton>
+          </ControlContainer>
+          <FlexContainer>
+            <VolumeSlider
               min={0}
               max={100}
               value={volume}
               onChange={changeVolume}
             />
-          </div>
-        </div>
+          </FlexContainer>
+        </StyledPlayer>
       )}
     </div>
   );

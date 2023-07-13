@@ -1,72 +1,15 @@
-import {
-  BuildingLibraryIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
-
-const SidebarWrapper = styled.div`
-  width: 20vh;
-  text-align: left;
-  flex-grow: 0;
-  flex-shrink: 0;
-  border-right: 1px solid #333;
-  padding: 3vh;
-  font-size: 16px;
-  display: flex;
-
-  @media screen and (max-width: 768px) {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #111;
-    padding: 1rem;
-    z-index: 999;
-    transition: all 0.3s ease-in-out;
-  }
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  color: green;
-  cursor: pointer;
-  width: 100%;
-  text-decoration: none;
-  font-size: 2vh;
-  padding: 2vh
-  &:hover {
-    color: #fff;
-  }
-
-  ${({ active }) =>
-    active &&
-    css`
-      color: #fff;
-    `}
-`;
-
-const PlaylistName = styled.p`
-  cursor: default;
-  color: green;
-  width: 95%;
-  text-decoration: none;
-  font-size: 1.7vh;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &:hover {
-    color: #fff;
-  }
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
+import {
+  SidebarWrapper,
+  Button,
+  PlaylistName,
+  Text,
+  Account,
+  Hr,
+  ProfileImg
+} from "./styles/SidebarStyle";
+import { HomeI, LibraryI, SearchI, LogOutI } from "./styles/IconStyle";
 
 const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
   const { data: session } = useSession();
@@ -93,22 +36,33 @@ const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
   return (
     <SidebarWrapper>
       <div>
+        <Button>
+          <ProfileImg
+            src={session?.user.image}
+            alt="profile pic"
+          />
+          <Account>{session?.user?.name}</Account>
+        </Button>
+        <Button onClick={() => signOut()}>
+          <LogOutI />
+          <Text>Log Out</Text>
+        </Button>
         <Button
           active={view === "homepage"}
           onClick={() => setView("homepage")}
         >
-          <BuildingLibraryIcon className="h-7 w-7" />
-          <span>Home</span>
+          <HomeI/>
+          <Text>Home</Text>
         </Button>
         <Button active={view === "search"} onClick={() => setView("search")}>
-          <MagnifyingGlassIcon className="h-7 w-7" />
-          <span>Search</span>
+          <SearchI/>
+          <Text>Search</Text>
         </Button>
         <Button active={view === "library"} onClick={() => setView("library")}>
-          <BuildingLibraryIcon className="h-7 w-7" />
-          <span>Your Library</span>
+          <LibraryI/>
+          <Text>Your Library</Text>
         </Button>
-        <hr className="" />
+        <Hr />
         <div>
           {playlists?.map((playlist) => {
             return (

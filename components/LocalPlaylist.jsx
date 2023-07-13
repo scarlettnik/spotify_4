@@ -1,13 +1,24 @@
-import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
-import Song from './Song';
-import LogOut from '../components/LogOut'
-import {Header, PlaylistImage, HeaderContent, PlaylistLabel, PlaylistTitle, Container, SongList, Wrapper } from './styles/LocalPlaylistStyle'
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import Song from "./Song";
+import {
+  Header,
+  PlaylistImage,
+  HeaderContent,
+  PlaylistLabel,
+  PlaylistTitle,
+  Container,
+  SongList,
+  Wrapper,
+} from "./styles/LocalPlaylistStyle";
 
-
-
-
-const LocalPlaylist = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTrackPlaying, setView, setGlobalArtistId }) => {
+const LocalPlaylist = ({
+  globalPlaylistId,
+  setGlobalCurrentSongId,
+  setGlobalIsTrackPlaying,
+  setView,
+  setGlobalArtistId,
+}) => {
   const { data: session } = useSession();
   const [playlistData, setPlaylistData] = useState(null);
 
@@ -15,11 +26,14 @@ const LocalPlaylist = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTr
     async function f() {
       if (session && session.accessToken) {
         console.log(session);
-        const response = await fetch(`https://api.spotify.com/v1/playlists/${globalPlaylistId}`, {
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`
+        const response = await fetch(
+          `https://api.spotify.com/v1/playlists/${globalPlaylistId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+            },
           }
-        });
+        );
         const data = await response.json();
         setPlaylistData(data);
       }
@@ -29,9 +43,8 @@ const LocalPlaylist = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTr
 
   return (
     <Container>
-      <LogOut/>
       <Wrapper>
-        <Header >
+        <Header>
           {playlistData && <PlaylistImage src={playlistData.images[0].url} />}
           <HeaderContent>
             <PlaylistLabel>Playlist</PlaylistLabel>
@@ -40,15 +53,17 @@ const LocalPlaylist = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTr
         </Header>
         <SongList>
           {playlistData?.tracks?.items?.map((track, i) => {
-            return <Song
-              setView={setView}
-              setGlobalArtistId={setGlobalArtistId}
-              setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
-              setGlobalCurrentSongId={setGlobalCurrentSongId}
-              key={track.track.id}
-              sno={i}
-              track={track.track}
-            />
+            return (
+              <Song
+                setView={setView}
+                setGlobalArtistId={setGlobalArtistId}
+                setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
+                setGlobalCurrentSongId={setGlobalCurrentSongId}
+                key={track.track.id}
+                sno={i}
+                track={track.track}
+              />
+            );
           })}
         </SongList>
       </Wrapper>
@@ -56,4 +71,4 @@ const LocalPlaylist = ({ globalPlaylistId, setGlobalCurrentSongId, setGlobalIsTr
   );
 };
 
-export default LocalPlaylist
+export default LocalPlaylist;

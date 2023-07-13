@@ -1,11 +1,8 @@
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
-import { PlaylistContainer, PlaylistName, PlaylistImage, PlaylistTitle, PlaylistOwner, PlaylistList,  PlaylistWrapper} from './styles/PlaylistStyle';
-
-
+import { PlaylistContainer, PlaylistName, PlaylistImage, PlaylistTitle, PlaylistOwner, PlaylistList, PlaylistWrapper } from './styles/PlaylistStyle';
 
 const GlobalPlaylists = ({ setView, setGlobalPlaylistId }) => {
-
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
 
@@ -35,21 +32,21 @@ const GlobalPlaylists = ({ setView, setGlobalPlaylistId }) => {
   }, [session]);
 
   return (
-    <>  
+    <>
       <PlaylistList>
-      <PlaylistName>Global Playlists</PlaylistName>
-      <PlaylistWrapper>
-        {playlists?.map((playlist) => (
-          <PlaylistContainer onClick={() => selectPlaylist(playlist)} key={playlist?.id}>
-            <PlaylistImage src={playlist?.images[0]?.url} alt={playlist?.name} />
-            <PlaylistTitle>{playlist?.name}</PlaylistTitle>
-            <PlaylistOwner>By {playlist?.owner?.display_name}</PlaylistOwner>
-          </PlaylistContainer>
-        ))}
-      </PlaylistWrapper>
-    </PlaylistList>
+        <PlaylistName>Global Playlists</PlaylistName>
+        <PlaylistWrapper>
+          {playlists?.map((playlist) => (
+            <PlaylistContainer onClick={() => selectPlaylist(playlist)} key={playlist?.id}>
+              <PlaylistImage src={playlist?.images[0]?.url} alt={playlist?.name} />
+              <PlaylistTitle>{playlist?.name}</PlaylistTitle>
+              <PlaylistOwner>By {playlist?.owner?.display_name}</PlaylistOwner>
+            </PlaylistContainer>
+          ))}
+        </PlaylistWrapper>
+      </PlaylistList>
     </>
-    
+
   );
 };
 

@@ -6,6 +6,7 @@ import LocalPlaylist from "@/components/LocalPlaylist"
 import Search from "@/components/Search"
 import HomePage from "@/components/HomePage"
 import { useState } from "react"
+import { MainContent, Container, PlayerBar } from "./style"
 
 export default function Home() {
   const [view, setView] = useState("homepage")
@@ -16,15 +17,14 @@ export default function Home() {
 
   return (
     <>
-      <main className=" bg-neutral-300 h-screen overflow-auto">
-        <div className="flex w-full">
+      <MainContent>
+        <Container>
           <Sidebar
             view={view}
             setView={setView}
             setGlobalPlaylistId={setGlobalPlaylistId}
           />
           {view === "playlist" && <LocalPlaylist
-            className = 'ml-0'
             setView={setView}
             setGlobalArtistId={setGlobalArtistId}
             globalPlaylistId={globalPlaylistId}
@@ -53,16 +53,16 @@ export default function Home() {
             setGlobalCurrentSongId={setGlobalCurrentSongId}
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
           />}
-        </div>
-        <div className=" absolute bottom-0 w-full bg-neutral-700">
+        </Container>
+        <PlayerBar>
           <Player
             globalCurrentSongId={globalCurrentSongId}
             setGlobalCurrentSongId={setGlobalCurrentSongId}
             setGlobalIsTrackPlaying={setGlobalIsTrackPlaying}
             globalIsTrackPlaying={globalIsTrackPlaying}
           />
-        </div>
-      </main>
+        </PlayerBar>
+      </MainContent>
 
     </>
   )

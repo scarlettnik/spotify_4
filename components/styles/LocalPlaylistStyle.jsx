@@ -14,6 +14,7 @@ export const Header = styled.section`
 
 export const PlaylistImage = styled.img`
   width: 25vh;
+  border: 50%;
 `;
 
 export const HeaderContent = styled.div`
@@ -30,10 +31,10 @@ export const PlaylistLabel = styled.p`
 `;
 
 export const PlaylistTitle = styled.h1`
-  font-size: 4vh;
+  font-size: 3vh;
   font-weight: 800;
   margin: 0;
-  color:#fff;
+  color: white;
 `;
 
 export const Container = styled.div`
