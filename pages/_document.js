@@ -1,5 +1,5 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import { ServerStyleSheet } from "styled-components";
 
 function MyDocument(props) {
   const { __html, ids } = props;
@@ -7,10 +7,7 @@ function MyDocument(props) {
     <Html>
       <Head>
         {ids?.map((id) => (
-          <style
-            key={id}
-            dangerouslySetInnerHTML={{ __html: __html[id] }}
-          />
+          <style key={id} dangerouslySetInnerHTML={{ __html: __html[id] }} />
         ))}
       </Head>
       <body>

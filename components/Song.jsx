@@ -8,7 +8,7 @@ import {
   AlbumImage,
   TrackDetails,
   TrackDuration,
-  AlbumSize, 
+  AlbumSize,
   AlbumName,
   PlayButton,
 } from "./styles/SongStyle";
@@ -65,7 +65,7 @@ const Song = ({
       <TrackInfo onClick={async () => await playSong(track)}>
         {hover ? (
           <PlayButton>
-            <PlayHover/>
+            <PlayHover />
           </PlayButton>
         ) : (
           <TrackNumber>{sno + 1}</TrackNumber>

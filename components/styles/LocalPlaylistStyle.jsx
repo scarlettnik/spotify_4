@@ -1,5 +1,4 @@
-import styled, {css} from 'styled-components';
-
+import styled, { css } from "styled-components";
 
 export const Header = styled.section`
   display: flex;
@@ -8,7 +7,11 @@ export const Header = styled.section`
   justify-content: flex-start;
   gap: 7px;
   height: 80vh;
-  background: linear-gradient(to bottom, green, ${props => props.color}) !important;
+  background: linear-gradient(
+    to bottom,
+    green,
+    ${(props) => props.color}
+  ) !important;
   padding: 1rem;
 `;
 
@@ -42,7 +45,6 @@ export const Container = styled.div`
   flex-direction: column;
   flex-grow: 1;
   position: relative;
-    
 `;
 export const SongList = styled.div`
   display: flex;
@@ -56,7 +58,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   height: calc(100vh - 0rem);
   @media (max-width: 700px) {
-  
     ${SongList} {
       padding: 0 1rem;
       ${css`

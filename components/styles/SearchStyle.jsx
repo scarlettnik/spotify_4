@@ -1,5 +1,5 @@
-import {MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import styled from 'styled-components';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import styled from "styled-components";
 
 export const SearchBar = styled.div`
   display: flex;
@@ -32,7 +32,6 @@ export const SearchIcon = styled(MagnifyingGlassIcon)`
   color: #4d4d4d;
 `;
 export const SearchContainer = styled.div`
-flex-grow: 1;
-height: 100vh;
+  flex-grow: 1;
+  height: 100vh;
 `;
-

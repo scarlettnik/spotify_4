@@ -7,7 +7,7 @@ import {
   Text,
   Account,
   Hr,
-  ProfileImg
+  ProfileImg,
 } from "./styles/SidebarStyle";
 import { HomeI, LibraryI, SearchI, LogOutI } from "./styles/IconStyle";
 
@@ -37,10 +37,7 @@ const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
     <SidebarWrapper>
       <div>
         <Button>
-          <ProfileImg
-            src={session?.user.image}
-            alt="profile pic"
-          />
+          <ProfileImg src={session?.user.image} alt="profile pic" />
           <Account>{session?.user?.name}</Account>
         </Button>
         <Button onClick={() => signOut()}>
@@ -51,15 +48,15 @@ const Sidebar = ({ view, setView, setGlobalPlaylistId }) => {
           active={view === "homepage"}
           onClick={() => setView("homepage")}
         >
-          <HomeI/>
+          <HomeI />
           <Text>Home</Text>
         </Button>
         <Button active={view === "search"} onClick={() => setView("search")}>
-          <SearchI/>
+          <SearchI />
           <Text>Search</Text>
         </Button>
         <Button active={view === "library"} onClick={() => setView("library")}>
-          <LibraryI/>
+          <LibraryI />
           <Text>Your Library</Text>
         </Button>
         <Hr />

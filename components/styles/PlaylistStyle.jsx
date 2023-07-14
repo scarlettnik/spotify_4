@@ -12,11 +12,11 @@ export const PlaylistContainer = styled.div`
   &:hover {
     background-color: #2d3748;
   }
-  
+
   @media screen and (max-width: 1000px) {
     width: 19vh;
     margin-left: 0.5rem;
-    overflow-y: auto
+    overflow-y: auto;
   }
 `;
 
@@ -64,7 +64,6 @@ export const PlaylistList = styled.div`
   height: calc(100vh - 0rem);
   padding: 0.5rem;
   overflow-y: hidden;
-  
 `;
 
 export const PlaylistWrapper = styled.div`
@@ -76,5 +75,4 @@ export const PlaylistWrapper = styled.div`
     justify-content: center;
     align-items: center;
   }
-  
 `;

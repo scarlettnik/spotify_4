@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const MainContent = styled.main`
   background-color: rgb(23 23 23);
@@ -26,12 +26,11 @@ export const FullScreenContainer = styled.div`
   justify-content: center;
 `;
 
-
 export const LoginButton = styled.button`
   color: white;
   padding: 0.5rem 2rem;
   border-radius: 9999px;
-  background-color: #10B981; /* or use your own green-500 color */
+  background-color: #10b981; /* or use your own green-500 color */
   font-weight: bold;
   font-size: 1.125rem;
 `;

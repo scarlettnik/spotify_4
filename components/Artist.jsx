@@ -18,7 +18,7 @@ import {
   RelatedArtistCard,
   RelatedArtistImage,
   RelatedArtistName,
-  RelatedArtistType
+  RelatedArtistType,
 } from "./styles/ArtistStyle";
 
 const Artist = ({
@@ -32,7 +32,7 @@ const Artist = ({
   const [artistData, setArtistData] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [relatedArtists, setRelatedArtists] = useState([]);
-  
+
   async function getArtistData() {
     const response = await fetch(
       `https://api.spotify.com/v1/artists/${globalArtistId}`,
@@ -49,7 +49,7 @@ const Artist = ({
   async function getTopTracks() {
     const response = await fetch(
       `https://api.spotify.com/v1/artists/${globalArtistId}/top-tracks?` +
-      new URLSearchParams({ market: "US" }),
+        new URLSearchParams({ market: "US" }),
       {
         headers: {
           Authorization: `Bearer ${session.accessToken}`,

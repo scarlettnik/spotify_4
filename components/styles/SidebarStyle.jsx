@@ -32,7 +32,6 @@ export const ProfileImg = styled.img`
   border-radius: 50%;
 `;
 
-
 export const Button = styled.button`
   display: inline-flex;
   align-items: center;

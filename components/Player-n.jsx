@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/react/outline';
-import { signOut, useSession } from 'next-auth/react';
-
+import React, { useState, useEffect } from "react";
+import { PauseCircleIcon, PlayCircleIcon } from "@heroicons/react/outline";
+import { signOut, useSession } from "next-auth/react";
 
 function Player({ globalPlaylistId }) {
   const [playlist, setPlaylist] = useState([]);
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const [trackIndex, setTrackIndex] = useState(0);
   const [playbackState, setPlaybackState] = useState({
     paused: true,
     track_window: {},
   });
-
-
 
   useEffect(() => {
     if (!session) {
@@ -20,11 +17,14 @@ function Player({ globalPlaylistId }) {
     }
 
     const fetchData = async () => {
-      const response = await fetch(`https://api.spotify.com/v1/playlists/${globalPlaylistId}/tracks?market=US&fields=items(track(uri,name,artists))`, {
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`
-        },
-      });
+      const response = await fetch(
+        `https://api.spotify.com/v1/playlists/${globalPlaylistId}/tracks?market=US&fields=items(track(uri,name,artists))`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+        }
+      );
 
       const data = await response.json();
       setPlaylist(data.items);
@@ -34,15 +34,15 @@ function Player({ globalPlaylistId }) {
   }, [playlistId]);
 
   const onPlay = async () => {
-    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
+    const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        uris: [playlist[trackIndex].track.uri]
-      })
+        uris: [playlist[trackIndex].track.uri],
+      }),
     });
 
     if (response.ok) {
@@ -51,11 +51,11 @@ function Player({ globalPlaylistId }) {
   };
 
   const onPause = async () => {
-    const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
-      method: 'PUT',
+    const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     });
 
@@ -66,12 +66,15 @@ function Player({ globalPlaylistId }) {
 
   const onPrevTrack = async () => {
     const prevIndex = trackIndex === 0 ? playlist.length - 1 : trackIndex - 1;
-    const response = await fetch('https://api.spotify.com/v1/me/player/previous', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-    });
+    const response = await fetch(
+      "https://api.spotify.com/v1/me/player/previous",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      }
+    );
 
     if (response.ok) {
       setTrackIndex(prevIndex);
@@ -81,8 +84,8 @@ function Player({ globalPlaylistId }) {
 
   const onNextTrack = async () => {
     const nextIndex = trackIndex === playlist.length - 1 ? 0 : trackIndex + 1;
-    const response = await fetch('https://api.spotify.com/v1/me/player/next', {
-      method: 'POST',
+    const response = await fetch("https://api.spotify.com/v1/me/player/next", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
       },
@@ -156,13 +159,15 @@ function Player({ globalPlaylistId }) {
           </div>
           <div className="flex justify-center items-center mt-4">
             <p className="text-gray-600">
-              {playlist[trackIndex].track.name} -{' '}
-              {playlist[trackIndex].track.artists.map((artist) => artist.name).join(', ')}
+              {playlist[trackIndex].track.name} -{" "}
+              {playlist[trackIndex].track.artists
+                .map((artist) => artist.name)
+                .join(", ")}
             </p>
           </div>
         </>
       )}
     </>
-  )
+  );
 }
-export default Player
+export default Player;

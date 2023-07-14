@@ -35,7 +35,6 @@ export const SongName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   text-space: nowrap;
-  
 `;
 
 export const ArtistName = styled.p`
